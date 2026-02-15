@@ -1,0 +1,151 @@
+header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 10dvh;
+  flex-shrink: 0;
+}
+
+h1 {
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+.color-indicator {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+/* --- Board sizing --- */
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding-bottom: 10dvh;
+}
+
+.board-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.board-wrap {
+  width: min(92vw, 80dvh);
+  aspect-ratio: 1;
+}
+
+/* --- Chess.com green board theme --- */
+
+.board-wrap cg-board {
+  background-image: url("/board-green.png");
+  background-size: cover;
+}
+
+.board-wrap cg-board square {
+  background: none;
+}
+
+.board-wrap cg-board square.last-move {
+  background-color: rgba(255, 255, 0, 0.4);
+}
+
+.board-wrap cg-board square.selected {
+  background-color: rgba(20, 85, 30, 0.5);
+}
+
+.board-wrap cg-board square.move-dest {
+  background: radial-gradient(rgba(20, 85, 30, 0.5) 22%, #208530 0, rgba(0, 0, 0, 0.3) 0, rgba(0, 0, 0, 0) 0);
+}
+
+.board-wrap cg-board square.oc.move-dest {
+  background: radial-gradient(transparent 0%, transparent 80%, rgba(20, 85, 0, 0.3) 80%);
+}
+
+/* --- Coordinate labels --- */
+
+.board-wrap coords coord {
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: lowercase;
+}
+
+.board-wrap .coord-dark {
+  color: #fff !important;
+}
+
+.board-wrap .coord-light {
+  color: #396128 !important;
+}
+
+/* --- Mobile: board fills screen, compact header --- */
+
+@media (max-width: 600px) {
+  header {
+    height: auto;
+    padding: 0.5rem 0 0.25rem;
+  }
+
+  main {
+    padding-bottom: 0;
+    align-items: flex-start;
+  }
+
+  .board-wrap {
+    width: 100vw;
+  }
+}
+
+/* --- Complete actions --- */
+
+.complete-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.action-btn {
+  padding: 0.5rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--bg);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.action-btn:hover,
+.action-btn:focus-visible {
+  opacity: 0.85;
+}
+
+/* --- Screen-reader only --- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Reduced motion --- */
+
+@media (prefers-reduced-motion: reduce) {
+  .success-content,
+  .success-overlay {
+    animation: none;
+  }
+}
