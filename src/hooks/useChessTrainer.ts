@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Chess } from "chess.js";
 import type { Move } from "chess.js";
 import { openings } from "../data/openings";
+import type { Opening } from "../data/openings";
 import type { Key } from "@lichess-org/chessground/types";
 
 function pickRandom(list: Opening[]): Opening {
@@ -122,10 +123,10 @@ export function useChessTrainer() {
   }, []);
 
   const userMoveCount = opening
-    ? opening.moves.filter((_, i) => isUserTurn(i)).length
+    ? opening.moves.filter((_: string, i: number) => isUserTurn(i)).length
     : 0;
   const completedUserMoves = opening
-    ? opening.moves.filter((_, i) => isUserTurn(i) && i < moveIndex).length
+    ? opening.moves.filter((_: string, i: number) => isUserTurn(i) && i < moveIndex).length
     : 0;
 
   return {
