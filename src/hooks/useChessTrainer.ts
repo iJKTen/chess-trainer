@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Chess } from "chess.js";
 import type { Move } from "chess.js";
 import { openings } from "../data/openings";
@@ -37,50 +37,44 @@ export function useChessTrainer() {
   const [lastMove, setLastMove] = useState<[Key, Key] | undefined>();
   const [complete, setComplete] = useState(false);
 
-  const isUserTurn = useCallback(
-    (idx: number) => {
-      if (!opening) return false;
-      const isWhiteMove = idx % 2 === 0;
-      return opening.color === "white" ? isWhiteMove : !isWhiteMove;
-    },
-    [opening],
-  );
+  const isUserTurn = (idx: number) => {
+    if (!opening) return false;
+    const isWhiteMove = idx % 2 === 0;
+    return opening.color === "white" ? isWhiteMove : !isWhiteMove;
+  };
 
-  const getLegalMoves = useCallback((): Map<Key, Key[]> => {
+  const getLegalMoves = (): Map<Key, Key[]> => {
     return buildLegalMoveMap(chessRef.current);
-  }, [opening, moveIndex]);
+  };
 
-  const tryMove = useCallback(
-    (from: Key, to: Key): Move | null => {
-      if (!opening) return null;
-      const chess = chessRef.current;
-      const expected = opening.moves[moveIndex];
-      if (!expected) return null;
+  const tryMove = (from: Key, to: Key): Move | null => {
+    if (!opening) return null;
+    const chess = chessRef.current;
+    const expected = opening.moves[moveIndex];
+    if (!expected) return null;
 
-      const move = chess.move({ from, to, promotion: "q" });
-      if (!move) return null;
+    const move = chess.move({ from, to, promotion: "q" });
+    if (!move) return null;
 
-      if (move.san !== expected) {
-        chess.undo();
-        return null;
-      }
+    if (move.san !== expected) {
+      chess.undo();
+      return null;
+    }
 
-      const newIndex = moveIndex + 1;
-      setMoveIndex(newIndex);
-      setFen(chess.fen());
-      setLastMove([from, to]);
-      playMoveSound(move.flags.includes('c') || move.flags.includes('e'));
+    const newIndex = moveIndex + 1;
+    setMoveIndex(newIndex);
+    setFen(chess.fen());
+    setLastMove([from, to]);
+    playMoveSound(move.flags.includes('c') || move.flags.includes('e'));
 
-      if (newIndex >= opening.moves.length) {
-        setComplete(true);
-      }
+    if (newIndex >= opening.moves.length) {
+      setComplete(true);
+    }
 
-      return move;
-    },
-    [moveIndex, opening],
-  );
+    return move;
+  };
 
-  const autoPlay = useCallback((): Move | null => {
+  const autoPlay = (): Move | null => {
     if (!opening) return null;
     const chess = chessRef.current;
     const expected = opening.moves[moveIndex];
@@ -100,18 +94,18 @@ export function useChessTrainer() {
     }
 
     return move;
-  }, [moveIndex, opening]);
+  };
 
-  const replay = useCallback(() => {
+  const replay = () => {
     const chess = new Chess();
     chessRef.current = chess;
     setMoveIndex(0);
     setFen(chess.fen());
     setLastMove(undefined);
     setComplete(false);
-  }, []);
+  };
 
-  const nextOpening = useCallback(() => {
+  const nextOpening = () => {
     const next = pickRandom(openings);
     const chess = new Chess();
     chessRef.current = chess;
@@ -120,7 +114,7 @@ export function useChessTrainer() {
     setFen(chess.fen());
     setLastMove(undefined);
     setComplete(false);
-  }, []);
+  };
 
   const userMoveCount = opening
     ? opening.moves.filter((_: string, i: number) => isUserTurn(i)).length

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Config } from "@lichess-org/chessground/config";
 import type { Key } from "@lichess-org/chessground/types";
 import { Board } from "./components/Board";
@@ -26,10 +26,10 @@ function App() {
   const [announcement, setAnnouncement] = useState("");
   const boardRef = useRef<BoardHandle>(null);
 
-  const announce = useCallback((msg: string) => {
+  const announce = (msg: string) => {
     setAnnouncement("");
     requestAnimationFrame(() => setAnnouncement(msg));
-  }, []);
+  };
 
   // Auto-play opponent moves with cancellable timeout
   useEffect(() => {
@@ -46,76 +46,61 @@ function App() {
     return () => clearTimeout(timeoutId);
   }, [moveIndex, complete, isUserTurn, autoPlay, announce, opening]);
 
-  const handleMove = useCallback(
-    (from: Key, to: Key) => {
-      if (!opening) return;
-      const move = tryMove(from, to);
-      if (move) {
-        announce(move.san);
-      } else {
-        const turnColor = moveIndex % 2 === 0 ? "white" : "black";
-        const api = boardRef.current?.getApi();
-        requestAnimationFrame(() => {
-          api?.set({
-            fen,
-            turnColor,
-            movable: {
-              color: opening.color,
-              dests: getLegalMoves(),
-            },
-            drawable: {
-              autoShapes: [
-                { orig: from, brush: "red" },
-                { orig: to, brush: "red" },
-              ],
-            },
-          });
+  const handleMove = (from: Key, to: Key) => {
+    if (!opening) return;
+    const move = tryMove(from, to);
+    if (move) {
+      announce(move.san);
+    } else {
+      const turnColor = moveIndex % 2 === 0 ? "white" : "black";
+      const api = boardRef.current?.getApi();
+      requestAnimationFrame(() => {
+        api?.set({
+          fen,
+          turnColor,
+          movable: {
+            color: opening.color,
+            dests: getLegalMoves(),
+          },
+          drawable: {
+            autoShapes: [
+              { orig: from, brush: "red" },
+              { orig: to, brush: "red" },
+            ],
+          },
         });
-        setTimeout(() => {
-          api?.set({ drawable: { autoShapes: [] } });
-        }, 600);
-        errorAudio.currentTime = 0;
-        errorAudio.play().catch(() => {});
-        announce("Wrong move, try again");
-      }
-    },
-    [tryMove, announce, fen, moveIndex, opening, getLegalMoves],
-  );
+      });
+      setTimeout(() => {
+        api?.set({ drawable: { autoShapes: [] } });
+      }, 600);
+      errorAudio.currentTime = 0;
+      errorAudio.play().catch(() => {});
+      announce("Wrong move, try again");
+    }
+  };
 
-  const groundConfig: Config = useMemo(
-    () => ({
-      fen,
-      coordinates: true,
-      orientation: opening?.color ?? "white",
-      turnColor: moveIndex % 2 === 0 ? "white" : "black",
-      lastMove: lastMove ? [lastMove[0], lastMove[1]] : undefined,
-      movable: {
-        free: false,
-        color: opening?.color ?? "white",
-        dests:
-          opening && isUserTurn(moveIndex) && !complete
-            ? getLegalMoves()
-            : new Map(),
-        events: {
-          after: handleMove,
-        },
+  const groundConfig: Config = {
+    fen,
+    coordinates: true,
+    orientation: opening?.color ?? "white",
+    turnColor: moveIndex % 2 === 0 ? "white" : "black",
+    lastMove: lastMove ? [lastMove[0], lastMove[1]] : undefined,
+    movable: {
+      free: false,
+      color: opening?.color ?? "white",
+      dests:
+        opening && isUserTurn(moveIndex) && !complete
+          ? getLegalMoves()
+          : new Map(),
+      events: {
+        after: handleMove,
       },
-      premovable: { enabled: false },
-      draggable: { enabled: true },
-      selectable: { enabled: true },
-      animation: { enabled: true, duration: 200 },
-    }),
-    [
-      fen,
-      opening,
-      moveIndex,
-      lastMove,
-      isUserTurn,
-      complete,
-      getLegalMoves,
-      handleMove,
-    ],
-  );
+    },
+    premovable: { enabled: false },
+    draggable: { enabled: true },
+    selectable: { enabled: true },
+    animation: { enabled: true, duration: 200 },
+  };
 
 
   return (
