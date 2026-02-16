@@ -3,6 +3,7 @@ import type { Config } from "@lichess-org/chessground/config";
 import type { Key } from "@lichess-org/chessground/types";
 import { Board } from "./components/Board";
 import type { BoardHandle } from "./components/Board";
+import { MoveList } from "./components/MoveList";
 import { useChessTrainer } from "./hooks/useChessTrainer";
 import "./App.css";
 
@@ -126,6 +127,7 @@ function App() {
             </div>
           )}
         </div>
+        <MoveList moves={opening.moves} moveIndex={moveIndex} />
         <div className="sr-only" aria-live="polite" aria-atomic="true">
           {announcement}
         </div>

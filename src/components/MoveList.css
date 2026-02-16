@@ -1,0 +1,60 @@
+.move-list {
+  width: 220px;
+  max-height: 100%;
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--text-muted) 25%, transparent);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.move-list-empty {
+  padding: 0.75rem 1rem;
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+.move-row {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr 1fr;
+  padding: 0.2rem 0.75rem;
+}
+
+.move-row:nth-child(odd) {
+  background: color-mix(in srgb, var(--text-muted) 6%, transparent);
+}
+
+.move-num {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.move-san {
+  padding: 0.05rem 0.35rem;
+  border-radius: 3px;
+}
+
+.move-active {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  font-weight: 600;
+}
+
+/* Scrollbar */
+.move-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.move-list::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+}
+
+@media (max-width: 900px) {
+  .move-list {
+    width: min(92vw, 70dvh);
+    max-height: 140px;
+  }
+}
