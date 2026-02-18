@@ -41,6 +41,7 @@ main {
 .board-wrap {
   width: min(92vw, 80dvh);
   aspect-ratio: 1;
+  touch-action: none;
 }
 
 /* --- Chess.com green board theme --- */
@@ -108,7 +109,7 @@ main {
   }
 
   .board-wrap {
-    width: min(100vw, 70dvh);
+    width: min(calc(100vw - 1px), 70dvh);
   }
 }
 
