@@ -55,6 +55,6 @@
 @media (max-width: 900px) {
   .move-list {
     width: min(92vw, 70dvh);
-    max-height: 140px;
+    height: 140px;
   }
 }

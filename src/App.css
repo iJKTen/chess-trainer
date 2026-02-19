@@ -94,6 +94,10 @@ main {
     flex-direction: column;
     align-items: center;
   }
+
+  .board-column {
+    flex-shrink: 0;
+  }
 }
 
 @media (max-width: 600px) {
