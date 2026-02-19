@@ -5,9 +5,10 @@ import { Board } from "./components/Board";
 import type { BoardHandle } from "./components/Board";
 import { MoveList } from "./components/MoveList";
 import { useChessTrainer } from "./hooks/useChessTrainer";
+import { preload, playSound } from "./audio";
 import "./App.css";
 
-const errorAudio = new Audio("/error.mp3");
+preload("/error.mp3");
 
 function App() {
   const {
@@ -74,8 +75,7 @@ function App() {
       setTimeout(() => {
         api?.set({ drawable: { autoShapes: [] } });
       }, 600);
-      errorAudio.currentTime = 0;
-      errorAudio.play().catch(() => {});
+      playSound("/error.mp3");
       announce("Wrong move, try again");
     }
   };

@@ -4,18 +4,16 @@ import type { Move } from "chess.js";
 import { openings } from "../data/openings";
 import type { Opening } from "../data/openings";
 import type { Key } from "@lichess-org/chessground/types";
+import { preload, playSound } from "../audio";
 
 function pickRandom(list: Opening[]): Opening {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-const moveAudio = new Audio("/move.mp3");
-const captureAudio = new Audio("/capture.mp3");
+preload("/move.mp3", "/capture.mp3");
 
 function playMoveSound(capture: boolean) {
-  const audio = capture ? captureAudio : moveAudio;
-  audio.currentTime = 0;
-  audio.play().catch(() => {});
+  playSound(capture ? "/capture.mp3" : "/move.mp3");
 }
 
 function buildLegalMoveMap(chess: Chess): Map<Key, Key[]> {

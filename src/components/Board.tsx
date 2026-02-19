@@ -40,6 +40,18 @@ export const Board = forwardRef<BoardHandle, BoardProps>(
       groundRef.current?.set(config);
     }, [config]);
 
+    // Recalculate bounds when the board resizes (e.g. iOS address bar collapse
+    // changes dvh units), so touch coordinates stay accurate.
+    useEffect(() => {
+      const el = boardRef.current;
+      if (!el) return;
+      const observer = new ResizeObserver(() => {
+        groundRef.current?.redrawAll();
+      });
+      observer.observe(el);
+      return () => observer.disconnect();
+    }, []);
+
     return (
       <div
         ref={boardRef}
