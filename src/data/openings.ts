@@ -71,4 +71,25 @@ export const openings: Opening[] = [
       "cxd4", "Bb6", "Nc3", "d6", "Bb5", "Bd7", "O-O", "Nge7", "Be3", "O-O", "h3",
     ],
   },
+  {
+    name: "Ponziani 3..d5",
+    color: "white",
+    moves: [
+      "e4", "e5", "Nf3", "Nc6", "c3", "d5", "Qa4", "f6!", "d3",
+    ],
+  },
+  {
+    name: "Ponziani 3..d5 4..dxe4? 5..Bd7",
+    color: "white",
+    moves: [
+      "e4", "e5", "Nf3", "Nc6", "c3", "d5", "Qa4", "dxe4", "Nxe5", "Bd7", "Nxd7", "Qxd7", "Qxe4+", "Be7", "Qf3", "Nf6", "d4", "O-O", "Be2", "Rfe8", "O-O", 
+    ],
+  },
+  {
+    name: "Ponziani 3..d5 4..dxe4? 5..Qd5?",
+    color: "white",
+    moves: [
+      "e4", "e5", "Nf3", "Nc6", "c3", "d5", "Qa4", "dxe4", "Nxe5", "Qd5", "Nxc6", "bxc6", "Bc4", "Qd6", "O-O", "Nf6", "d4", "Be7", "Bf4", "Qxf4", "Qxc6+",
+    ],
+  },
 ];
