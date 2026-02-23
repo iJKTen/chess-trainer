@@ -28,15 +28,17 @@ npm run dev
 
 ## Adding Openings
 
-Openings are defined in `src/data/openings.ts`. Each opening has a name, the color you play as, and a list of moves in SAN notation:
+Openings are defined in `src/data/openings.json`. Each opening has a name, the color you play as, and a list of moves in SAN notation:
 
-```ts
+```json
 {
-  name: "italian game",
-  color: "white",
-  moves: ["e4", "e5", "Nf3", "Nc6", "Bc4"],
+  "name": "italian game",
+  "color": "white",
+  "moves": ["e4", "e5", "Nf3", "Nc6", "Bc4"]
 }
 ```
+
+The openings file is lazy-loaded via dynamic `import()` so it is code-split into its own chunk and fetched after the initial page render, keeping the main bundle small.
 
 ## Scripts
 
