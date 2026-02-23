@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Chess } from "chess.js";
 import type { Move } from "chess.js";
-import { openings } from "../data/openings";
+import { loadOpenings } from "../data/openings";
 import type { Opening } from "../data/openings";
 import type { Key } from "@lichess-org/chessground/types";
 import { preload, playSound } from "../audio";
@@ -27,13 +27,29 @@ function buildLegalMoveMap(chess: Chess): Map<Key, Key[]> {
   return dests;
 }
 
+let openingsCache: Opening[] | null = null;
+
 export function useChessTrainer() {
   const chessRef = useRef(new Chess());
-  const [opening, setOpening] = useState(() => pickRandom(openings));
+  const [opening, setOpening] = useState<Opening | null>(null);
+  const [loading, setLoading] = useState(true);
   const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(chessRef.current.fen());
   const [lastMove, setLastMove] = useState<[Key, Key] | undefined>();
   const [complete, setComplete] = useState(false);
+
+  useEffect(() => {
+    if (openingsCache) {
+      setOpening(pickRandom(openingsCache));
+      setLoading(false);
+      return;
+    }
+    loadOpenings().then((data) => {
+      openingsCache = data;
+      setOpening(pickRandom(data));
+      setLoading(false);
+    });
+  }, []);
 
   const isUserTurn = (idx: number) => {
     if (!opening) return false;
@@ -104,7 +120,8 @@ export function useChessTrainer() {
   };
 
   const nextOpening = () => {
-    const next = pickRandom(openings);
+    if (!openingsCache) return;
+    const next = pickRandom(openingsCache);
     const chess = new Chess();
     chessRef.current = chess;
     setOpening(next);
@@ -123,6 +140,7 @@ export function useChessTrainer() {
 
   return {
     opening,
+    loading,
     fen,
     lastMove,
     complete,

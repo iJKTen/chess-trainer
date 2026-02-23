@@ -13,6 +13,7 @@ preload("/error.mp3");
 function App() {
   const {
     opening,
+    loading,
     fen,
     lastMove,
     complete,
@@ -79,6 +80,8 @@ function App() {
       announce("Wrong move, try again");
     }
   };
+
+  if (loading || !opening) return null;
 
   const groundConfig: Config = {
     fen,
