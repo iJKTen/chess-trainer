@@ -28,7 +28,7 @@ npm run dev
 
 ## Adding Openings
 
-Openings are defined in `src/data/openings.json`. Each opening has a name, the color you play as, and a list of moves in SAN notation:
+Openings are defined in `data/openings.json`. Each opening has a name, the color you play as, and a list of moves in SAN notation:
 
 ```json
 {
@@ -38,7 +38,7 @@ Openings are defined in `src/data/openings.json`. Each opening has a name, the c
 }
 ```
 
-The openings file is lazy-loaded via dynamic `import()` so it is code-split into its own chunk and fetched after the initial page render, keeping the main bundle small.
+The openings file is fetched at runtime from `/data/openings.json` so it is not bundled into the JS. In dev, a Vite plugin serves the file from the `data/` directory. In production, the file is hosted separately on S3.
 
 ## Scripts
 
