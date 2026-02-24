@@ -5,6 +5,6 @@ export interface Opening {
 }
 
 export async function loadOpenings(): Promise<Opening[]> {
-  const data = await import("./openings.json");
-  return data.default as Opening[];
+  const res = await fetch("/data/openings.json");
+  return res.json();
 }
